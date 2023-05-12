@@ -50,7 +50,37 @@ const Navbar = () => {
         ) : (
           <>
             {providers &&
-              Object.values(providers).map(provider => (
+              Object.values(providers).map((provider) => (
+                <button
+                  type="button"
+                  key={provider.name}
+                  onClick={() => signIn(provider.id)}
+                  className="black_btn"
+                >
+                  Sign In
+                </button>
+              ))}
+          </>
+        )}
+      </div>
+
+      {/* Mobile navigation */}
+      <div className="sm:hidden flex relative">
+        {isUserLoggedIn ? (
+          <div className="flex">
+            <Image
+              src="/assets/images/logo.svg"
+              alt="profile image"
+              width={37}
+              height={37}
+              className="rounded-full"
+              onClick={() => {}}
+            />
+          </div>
+        ) : (
+          <>
+            {providers &&
+              Object.values(providers).map((provider) => (
                 <button
                   type="button"
                   key={provider.name}
