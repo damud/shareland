@@ -7,6 +7,7 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 const Navbar = () => {
   const isUserLoggedIn = true;
   const [providers, setProviers] = useState(null);
+  const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
     const setProviders = async () => {
@@ -74,8 +75,37 @@ const Navbar = () => {
               width={37}
               height={37}
               className="rounded-full"
-              onClick={() => {}}
+              onClick={() => setToggleDropdown((prev) => !prev)}
             />
+
+            {toggleDropdown && (
+              <div className="dropdown">
+                <Link
+                  href="/profile"
+                  className="dropdown_link"
+                  onClick={() => setToggleDropdown(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href="/create-prompt"
+                  className="dropdown_link"
+                  onClick={() => setToggleDropdown(false)}
+                >
+                  Create Prompt
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setToggleDropdown(false);
+                    signOut();
+                  }}
+                  className="mt-5 w-full black_btn"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <>
