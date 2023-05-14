@@ -5,16 +5,16 @@ import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Navbar = () => {
-  const isUserLoggedIn = true;
-  const [providers, setProviers] = useState(null);
+  const { data: session } = useSession();
+  const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
-    const setProviders = async () => {
+    const setUpProviders = async () => {
       const response = await getProviders();
       setProviders(response);
     };
-    setProviders();
+    setUpProviders();
   }, []);
   return (
     <nav className="flex-between w-full mb-16 pt-3">
@@ -30,7 +30,7 @@ const Navbar = () => {
       </Link>
       {/* Desktop navigation */}
       <div className="sm:flex hidden">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Create Post
@@ -40,7 +40,7 @@ const Navbar = () => {
             </button>
             <Link href="/profile">
               <Image
-                src="/assets/images/logo.svg"
+                src={session?.user.image}
                 alt="profile image"
                 width={37}
                 height={37}
@@ -51,7 +51,7 @@ const Navbar = () => {
         ) : (
           <>
             {providers &&
-              Object.values(providers).map((provider) => (
+              Object.values(providers).map(provider => (
                 <button
                   type="button"
                   key={provider.name}
@@ -67,15 +67,15 @@ const Navbar = () => {
 
       {/* Mobile navigation */}
       <div className="sm:hidden flex relative">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user.image}
               alt="profile image"
               width={37}
               height={37}
               className="rounded-full"
-              onClick={() => setToggleDropdown((prev) => !prev)}
+              onClick={() => setToggleDropdown(prev => !prev)}
             />
 
             {toggleDropdown && (
@@ -110,7 +110,7 @@ const Navbar = () => {
         ) : (
           <>
             {providers &&
-              Object.values(providers).map((provider) => (
+              Object.values(providers).map(provider => (
                 <button
                   type="button"
                   key={provider.name}
